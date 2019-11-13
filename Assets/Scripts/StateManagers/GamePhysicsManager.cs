@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
@@ -8,6 +9,8 @@ using UnityStandardAssets.CrossPlatformInput;
 public class GamePhysicsManager : Manager<GamePhysicsManager> {
     public float GravityScale = 3;
     public float RotationSpeed = 360f;
+
+    public event EventHandler OnGravityChange;
 
     /// <summary>
     /// Sets or gets the gravity direction in Vector2.
@@ -65,6 +68,7 @@ public class GamePhysicsManager : Manager<GamePhysicsManager> {
             RotationSpeed * Time.deltaTime
         );
         if (CrossPlatformInputManager.GetButtonDown("AltHorizontal")) {
+            OnGravityChange?.Invoke(this, EventArgs.Empty);
             var direction = Mathf.Sign(CrossPlatformInputManager.GetAxisRaw("AltHorizontal"));
             RelativeRotation += direction * 90;
         }

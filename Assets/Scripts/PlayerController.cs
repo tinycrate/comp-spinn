@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
@@ -32,13 +33,21 @@ public class PlayerController : MonoBehaviour {
 
     void Start() {
         physicsManager = GamePhysicsManager.Instance;
+        physicsManager.OnGravityChange += OnGravityChange;
     }
 
     void FixedUpdate() {
         if (JumpScheduled && jumpsRemaining > 0) {
             Jump();
             jumpsRemaining--;
+        } else if (JumpScheduled && IsGrounded()) {
+            Jump();
+            jumpsRemaining = JumpLimit - 1;
         }
+    }
+
+    void OnGravityChange(object sender, EventArgs e) {
+        if (IsGrounded()) jumpsRemaining = JumpLimit - 1;
     }
 
     // Update is called once per frame
@@ -49,12 +58,9 @@ public class PlayerController : MonoBehaviour {
             rigidBody2D.velocity = transform.TransformDirection(new Vector2(inputX * Speed, localVelocity.y));
         }
         if (CrossPlatformInputManager.GetButtonDown("Jump")) {
+            if (IsGrounded()) jumpsRemaining = JumpLimit;
             JumpScheduled = true;
         }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision) {
-        if (IsGrounded()) jumpsRemaining = JumpLimit;
     }
 
     private void Jump() {
