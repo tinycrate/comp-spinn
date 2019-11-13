@@ -754,7 +754,7 @@ GameObject:
   - component: {fileID: 762105545}
   - component: {fileID: 762105546}
   - component: {fileID: 762105547}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -896,7 +896,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 10
-  JumpForce: 15
+  JumpLimit: 2
+  JumpForce: 12
+  DistanceToGround: 0.2
+  JumpScheduleTime: 0.2
 --- !u!114 &762105547
 MonoBehaviour:
   m_ObjectHideFlags: 0

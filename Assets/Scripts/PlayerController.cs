@@ -5,17 +5,45 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerController : MonoBehaviour {
     public float Speed = 10;
+    public float JumpLimit = 2;
     public float JumpForce = 10;
+    public float DistanceToGround = 0.3f;
+    public float JumpScheduleTime = 0.1f;
+
     private Rigidbody2D rigidBody2D = null;
-    private float distanceToGround = 0;
+    private Collider2D playerCollider;
+    private GamePhysicsManager physicsManager;
+
+    /// <summary>
+    /// Whether a jump is being scheduled in the next JumpScheduleTime seconds
+    /// When set to true, schedules a jump to be executed if the player lands in JumpScheduleTime time 
+    /// </summary>
+    public bool JumpScheduled {
+        get => lastScheduledJump >= 0 && Time.time - lastScheduledJump < JumpScheduleTime;
+        private set => lastScheduledJump = value ? Time.time : -1;
+    }
+    private float lastScheduledJump = -1;
+    private float jumpsRemaining = 0;
 
     void Awake() {
         rigidBody2D = ComponentUtils.GetOrCreate<Rigidbody2D>(gameObject);
-        var playerCollider = ComponentUtils.Get<Collider2D>(gameObject);
-        distanceToGround = playerCollider.bounds.extents.y + 0.1f;
+        playerCollider = ComponentUtils.Get<Collider2D>(gameObject);
+    }
+
+    void Start() {
+        physicsManager = GamePhysicsManager.Instance;
     }
 
     void FixedUpdate() {
+        if (JumpScheduled) {
+            if (IsGrounded()) {
+                jumpsRemaining = JumpLimit - 1;
+                Jump();
+            } else if (jumpsRemaining > 0) {
+                jumpsRemaining--;
+                Jump();
+            }
+        }
     }
 
     // Update is called once per frame
@@ -26,8 +54,26 @@ public class PlayerController : MonoBehaviour {
             rigidBody2D.velocity = transform.TransformDirection(new Vector2(inputX * Speed, localVelocity.y));
         }
         if (CrossPlatformInputManager.GetButtonDown("Jump")) {
-            Debug.DrawRay(transform.position, new Vector3(0, -distanceToGround, 0), Color.red);
-            rigidBody2D.AddRelativeForce(new Vector2(0,JumpForce), ForceMode2D.Impulse);
+            JumpScheduled = true;
         }
+    }
+
+    private void Jump() {
+        rigidBody2D.velocity *= new Vector2(1, 0);
+        rigidBody2D.AddRelativeForce(new Vector2(0,JumpForce), ForceMode2D.Impulse);
+        JumpScheduled = false;
+    }
+
+    private bool IsGrounded() {
+        return Physics2D.BoxCast(
+            transform.position,
+            // Creates a 0.1f thick box cast
+            new Vector2(playerCollider.bounds.size.x, 0.1f),
+            physicsManager.RelativeRotation,
+            physicsManager.GravityDirection,
+            // The box travels by distanceToGround units
+            playerCollider.bounds.extents.y + DistanceToGround,
+            ~LayerMask.GetMask("Player")
+        );
     }
 }
