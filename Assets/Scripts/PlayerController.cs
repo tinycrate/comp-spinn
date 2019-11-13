@@ -35,14 +35,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (JumpScheduled) {
-            if (IsGrounded()) {
-                jumpsRemaining = JumpLimit - 1;
-                Jump();
-            } else if (jumpsRemaining > 0) {
-                jumpsRemaining--;
-                Jump();
-            }
+        if (JumpScheduled && jumpsRemaining > 0) {
+            Jump();
+            jumpsRemaining--;
         }
     }
 
@@ -58,8 +53,13 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    void OnCollisionEnter2D(Collision2D collision) {
+        if (IsGrounded()) jumpsRemaining = JumpLimit;
+    }
+
     private void Jump() {
-        rigidBody2D.velocity *= new Vector2(1, 0);
+        var localVelocity = transform.InverseTransformDirection(rigidBody2D.velocity);
+        rigidBody2D.velocity = transform.TransformDirection(new Vector2(localVelocity.x, 0));
         rigidBody2D.AddRelativeForce(new Vector2(0,JumpForce), ForceMode2D.Impulse);
         JumpScheduled = false;
     }
