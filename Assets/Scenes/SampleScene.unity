@@ -898,8 +898,8 @@ MonoBehaviour:
   Speed: 10
   JumpLimit: 2
   JumpForce: 12
-  DistanceToGround: 0.2
-  JumpScheduleTime: 0.2
+  DistanceToGround: 0.15
+  JumpScheduleTime: 0.15
 --- !u!114 &762105547
 MonoBehaviour:
   m_ObjectHideFlags: 0
