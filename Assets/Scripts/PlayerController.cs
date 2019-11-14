@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour {
     public int JumpCountLimit = 2;
 
     private Rigidbody2D rigidBody2D = null;
-    private Collider2D playerCollider;
+    private BoxCollider2D playerCollider;
     private GamePhysicsManager physicsManager;
     private Animator playerAnimator;
     private SpriteRenderer spriteRenderer;
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour {
 
     void Awake() {
         rigidBody2D = ComponentUtils.GetOrCreate<Rigidbody2D>(gameObject);
-        playerCollider = ComponentUtils.Get<Collider2D>(gameObject);
+        playerCollider = ComponentUtils.Get<BoxCollider2D>(gameObject);
         playerAnimator = ComponentUtils.GetOrNull<Animator>(gameObject);
         spriteRenderer = ComponentUtils.Get<SpriteRenderer>(gameObject);
     }
@@ -102,11 +102,11 @@ public class PlayerController : MonoBehaviour {
         IsGrounded = Physics2D.BoxCast(
             playerCollider.bounds.center,
             // Creates a 0.1f thick box cast
-            new Vector2(playerCollider.bounds.size.x, 0.1f),
+            new Vector2(playerCollider.size.x, 0.1f),
             physicsManager.RelativeRotation,
             physicsManager.GravityDirection,
             // The box travels by distanceToGround units
-            playerCollider.bounds.extents.y + DistanceToGround,
+            playerCollider.size.y / 2 + DistanceToGround,
             ~LayerMask.GetMask("Player")
         );
         playerAnimator?.SetBool("Air", !IsGrounded);
