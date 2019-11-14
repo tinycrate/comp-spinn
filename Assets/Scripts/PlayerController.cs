@@ -98,7 +98,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void UpdatePlayerState() {
-        playerAnimator?.SetFloat("Velocity_Y", rigidBody2D.velocity.y);
+        var localVelocity = transform.InverseTransformDirection(rigidBody2D.velocity);
+        playerAnimator?.SetFloat("Velocity_Y", localVelocity.y);
         IsGrounded = Physics2D.BoxCast(
             playerCollider.bounds.center,
             // Creates a 0.1f thick box cast
