@@ -35,10 +35,7 @@ public class GamePhysicsManager : Manager<GamePhysicsManager> {
     /// Provides a rotation value for objects so they can be rotated according to
     /// gravitational changes. Smoothing is applied.
     /// </summary>
-    public Quaternion Rotation => rotation;
-
-    // This backing field is for Unity Inspector
-    private Quaternion rotation = Quaternion.identity;
+    public Quaternion Rotation { get; private set; } = Quaternion.identity;
 
     /// <summary>
     /// Rotation in degree relative to the world space downward direction
@@ -54,7 +51,7 @@ public class GamePhysicsManager : Manager<GamePhysicsManager> {
 
     protected override void Init() {
         GravityDirection = Vector2.down;
-        rotation = Quaternion.Euler(0, 0, RelativeRotation);
+        Rotation = Quaternion.Euler(0, 0, RelativeRotation);
     }
 
     public void FixedUpdate() {
@@ -62,7 +59,7 @@ public class GamePhysicsManager : Manager<GamePhysicsManager> {
     }
 
     public void Update() {
-        rotation = Quaternion.RotateTowards(
+        Rotation = Quaternion.RotateTowards(
             Rotation,
             Quaternion.Euler(0, 0, RelativeRotation),
             RotationSpeed * Time.deltaTime
