@@ -21,6 +21,19 @@ public static class ComponentUtils {
         component = origin.AddComponent<T>();
         return component;
     }
+
+    /// <summary>
+    /// Gets a component, returns a vanilla C# null if not found.
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <returns>GameObject that the component is attached</returns>
+    public static T GetOrNull<T>(GameObject origin) where T : Component {
+        T component = origin.GetComponent<T>();
+        // GetComponent<T> doesn't actually returns true null if not found and overrides == instead
+        // Therefore has to return null explicitly
+        return component != null ? component : null;
+    }
+
     /// <summary>
     /// Gets a component, logs an error if not found.
     /// </summary>
