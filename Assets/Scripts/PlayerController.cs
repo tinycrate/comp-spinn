@@ -32,7 +32,26 @@ public class PlayerController : MonoBehaviour {
     /// <summary>
     /// Whether the player is on the ground
     /// </summary>
-    public bool IsGrounded { get; private set; }
+    public bool IsGrounded {
+        get => isGrounded;
+        private set {
+            isGrounded = value;
+            playerAnimator?.SetBool("Air", !isGrounded);
+        }
+    }
+    private bool isGrounded = false;
+
+    /// <summary>
+    /// Whether the player is walking
+    /// </summary>
+    public bool IsWalking {
+        get => isWalking;
+        private set {
+            isWalking = value;
+            playerAnimator?.SetBool("Run", isWalking);
+        }
+    }
+    private bool isWalking = false;
 
     void Awake() {
         rigidBody2D = ComponentUtils.GetOrCreate<Rigidbody2D>(gameObject);
@@ -48,6 +67,12 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate() {
         HandleScheduledJump();
+        float inputX = CrossPlatformInputManager.GetAxis("Horizontal");
+        if (IsWalking) {
+            spriteRenderer.flipX = inputX < 0;
+            var localVelocity = transform.InverseTransformDirection(rigidBody2D.velocity);
+            rigidBody2D.velocity = transform.TransformDirection(new Vector2(inputX * Speed, localVelocity.y));
+        }
     }
 
     // Update is called once per frame
@@ -57,14 +82,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void HandleInput() {
-        float inputX = CrossPlatformInputManager.GetAxis("Horizontal");
         if (CrossPlatformInputManager.GetButton("Horizontal")) {
-            playerAnimator?.SetBool("Run", true);
-            spriteRenderer.flipX = inputX < 0;
-            var localVelocity = transform.InverseTransformDirection(rigidBody2D.velocity);
-            rigidBody2D.velocity = transform.TransformDirection(new Vector2(inputX * Speed, localVelocity.y));
+            IsWalking = true;
         } else {
-            playerAnimator?.SetBool("Run", false);
+            IsWalking = false;
         }
         if (CrossPlatformInputManager.GetButtonDown("Jump")) {
             JumpScheduled = true;
@@ -110,6 +131,5 @@ public class PlayerController : MonoBehaviour {
             playerCollider.size.y / 2 + DistanceToGround,
             ~LayerMask.GetMask("Player")
         );
-        playerAnimator?.SetBool("Air", !IsGrounded);
     }
 }
