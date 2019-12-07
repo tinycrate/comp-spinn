@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour {
     private GamePhysicsManager physicsManager;
     private Animator playerAnimator;
     private SpriteRenderer spriteRenderer;
+    private PlayerStateManager playerStateManager;
 
     /// <summary>
     /// Whether a jump is being scheduled in the next JumpScheduleTime seconds
@@ -63,6 +64,7 @@ public class PlayerController : MonoBehaviour {
     void Start() {
         physicsManager = GamePhysicsManager.Instance;
         physicsManager.OnGravityChange += OnGravityChange;
+        playerStateManager = PlayerStateManager.Instance;
     }
 
     void FixedUpdate() {
@@ -82,6 +84,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void HandleInput() {
+        if (!playerStateManager.Living) {
+            IsWalking = false;
+            JumpScheduled = false;
+            return;
+        }
         if (CrossPlatformInputManager.GetButton("Horizontal")) {
             IsWalking = true;
         } else {
@@ -129,7 +136,7 @@ public class PlayerController : MonoBehaviour {
             physicsManager.GravityDirection,
             // The box travels by distanceToGround units
             playerCollider.size.y / 2 + DistanceToGround,
-            ~LayerMask.GetMask("Player")
+            ~(LayerMask.GetMask("Player") + LayerMask.GetMask("Door"))
         );
     }
 }

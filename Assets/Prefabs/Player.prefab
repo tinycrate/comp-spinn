@@ -16,9 +16,11 @@ GameObject:
   - component: {fileID: 8157721470623322552}
   - component: {fileID: 8157721470623322503}
   - component: {fileID: 8157721470623322502}
+  - component: {fileID: 5521476782095526547}
+  - component: {fileID: 283786428489881149}
   m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -131,7 +133,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 0.8146496, y: 0.87880945}
-  m_EdgeRadius: 0.000001
+  m_EdgeRadius: 0
 --- !u!50 &8157721470623322553
 Rigidbody2D:
   serializedVersion: 4
@@ -166,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 10
-  JumpForce: 12
+  JumpForce: 10
   DistanceToGround: 0.15
   JumpScheduleTime: 0.15
   JumpCountLimit: 2
@@ -192,5 +194,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50f21e10975556f459e37a4f157077a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5521476782095526547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8157721470623322497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 008a7407503c7ac4782ae1d01cb94410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeyItemPrefab: {fileID: 8010325913672669375, guid: 8e692fbbb6f49a94f9fa90193f286c2d,
+    type: 3}
+--- !u!114 &283786428489881149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8157721470623322497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd72880144cbb954095707baa4d266f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

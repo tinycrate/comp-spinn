@@ -64,10 +64,22 @@ public class GamePhysicsManager : Manager<GamePhysicsManager> {
             Quaternion.Euler(0, 0, RelativeRotation),
             RotationSpeed * Time.deltaTime
         );
-        if (CrossPlatformInputManager.GetButtonDown("AltHorizontal")) {
-            OnGravityChange?.Invoke(this, EventArgs.Empty);
-            var direction = Mathf.Sign(CrossPlatformInputManager.GetAxisRaw("AltHorizontal"));
-            RelativeRotation += direction * 90;
-        }
+    }
+
+    /// <summary>
+    /// Changes the direction of gravity by 90 degree
+    /// </summary>
+    /// <param name="direction">Positive value: clockwise, negative value: anti-clockwise</param>
+    public void ChangeGravity(float direction) {
+        OnGravityChange?.Invoke(this, EventArgs.Empty);
+        RelativeRotation += direction * 90;
+    }
+
+    /// <summary>
+    /// Reset rotation and gravity to default
+    /// </summary>
+    public void HardResetRotation() {
+        RelativeRotation = 0;
+        Rotation = Quaternion.Euler(0, 0, RelativeRotation);
     }
 }
