@@ -58,6 +58,8 @@ public class PlayerEventController : MonoBehaviour {
             ComponentUtils.Get<SpriteRenderer>(playerStateManager.CurrentPlayerReference).enabled = false;
             StartCoroutine(CameraAnimationController.Instance.PlayDeath());
             GameOverBannerController.Instance.ShowBanner();
+            GameSoundManager.Instance.StopBackgroundMusic();
+            GameSoundManager.Instance.PlaySound(GameSoundManager.GameOverAudioClip);
             playerStateManager.CurrentPlayerReference.SetActive(false);
             yield break;
         }

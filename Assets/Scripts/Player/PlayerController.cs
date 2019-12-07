@@ -104,10 +104,12 @@ public class PlayerController : MonoBehaviour {
         if (IsGrounded) {
             Jump();
             MidAirJumpsRemaining = JumpCountLimit - 1;
+            GameSoundManager.Instance.PlaySound(GameSoundManager.JumpAudioClip);
             JumpScheduled = false;
         } else if (MidAirJumpsRemaining > 0) {
             MidAirJumpsRemaining--;
             Jump();
+            GameSoundManager.Instance.PlaySound(GameSoundManager.JumpAudioClip);
             JumpScheduled = false;
         }
     }
