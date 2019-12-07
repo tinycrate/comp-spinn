@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameEventManager : Manager<GameEventManager> {
 
-    public bool CurrentLevelWinnable { get; private set; } = false;
+    public bool CurrentLevelWinnable { get; set; } = false;
 
     private PlayerStateManager playerStateManager;
 
@@ -25,9 +25,5 @@ public class GameEventManager : Manager<GameEventManager> {
         var winTextOverlayController = WinTextOverlayController.Instance;
         yield return winTextOverlayController.PlayWinAnimation();
         GameLevelManager.Instance.NextLevel();
-    }
-
-    public void RegisterWinnableLevel() {
-        CurrentLevelWinnable = true;
     }
 }

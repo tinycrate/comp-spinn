@@ -59,7 +59,7 @@ public class GameLevelManager : Manager<GameLevelManager> {
         var levelMeta = LoadLevelMeta();
         var player = GameObject.FindWithTag("Player");
         playerStateManager.OnLevelChange(levelMeta.MaxHealth, levelMeta.MaxSpin, player);
-        gameEventManager.RegisterWinnableLevel();
+        gameEventManager.CurrentLevelWinnable = true;
         var timeWait = Mathf.Max(0, anim_time/2 - (Time.time - timeStart));
         yield return new WaitForSeconds(timeWait);
         StartFadeinAnim();
