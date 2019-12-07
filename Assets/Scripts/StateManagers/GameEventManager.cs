@@ -23,6 +23,8 @@ public class GameEventManager : Manager<GameEventManager> {
     private IEnumerator WinLevel() {
         playerStateManager.Living = false;
         var winTextOverlayController = WinTextOverlayController.Instance;
+        GameSoundManager.Instance.StopBackgroundMusic();
+        GameSoundManager.Instance.PlaySound(GameSoundManager.LevelClearAudioClip);
         yield return winTextOverlayController.PlayWinAnimation();
         GameLevelManager.Instance.NextLevel();
     }

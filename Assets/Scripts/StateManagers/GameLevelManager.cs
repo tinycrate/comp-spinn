@@ -65,6 +65,7 @@ public class GameLevelManager : Manager<GameLevelManager> {
         StartFadeinAnim();
         anim_time = FadeAnimator.GetCurrentAnimatorStateInfo(0).length;
         yield return new WaitForSeconds(anim_time);
+        GameSoundManager.Instance.PlayBackgroundMusic();
         Circle.SetActive(false);
     }
 
