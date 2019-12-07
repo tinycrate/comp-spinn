@@ -22,7 +22,7 @@ public class PlayerEventController : MonoBehaviour {
     }
 
     public void Update() {
-        if (CrossPlatformInputManager.GetButtonDown("AltHorizontal") && !playerStateManager.Spinning) {
+        if (CrossPlatformInputManager.GetButtonDown("AltHorizontal") && !playerStateManager.Spinning && playerStateManager.Living) {
             playerStateManager.Spinning = true;
             StartCoroutine(OnPlayerSpin());
         }
